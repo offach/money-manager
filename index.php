@@ -2,7 +2,7 @@
 session_start();
 require_once 'config.php';
 
-// PHP-логика остается прежней. Она стабильна.
+
 if (isset($_GET['logout'])) { session_destroy(); header('Location: index.php'); exit; }
 $is_logged_in = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 $error_message = '';
