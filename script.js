@@ -44,21 +44,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const netMonthlyIncome = salary - monthlyPayments;
         const netDailyIncome = netMonthlyIncome / AVG_DAYS_IN_MONTH;
-        ui.dailyIncome.textContent = `~ ${Math.round(netDailyIncome)} ₽`; // ИЗМЕНЕНО
+        ui.dailyIncome.textContent = `~ ${Math.round(netDailyIncome)} ₽`;
 
         const validEntries = Object.values(appData.entries).filter(v => v !== null);
         const daysCount = validEntries.length;
         const totalSaved = validEntries.reduce((sum, expense) => sum + (netDailyIncome - parseFloat(expense)), 0);
         
-        ui.accumulatedBalance.textContent = `${Math.round(totalSaved)} ₽`; // ИЗМЕНЕНО
+        ui.accumulatedBalance.textContent = `${Math.round(totalSaved)} ₽`;
         ui.accumulatedBalance.style.color = totalSaved >= 0 ? 'var(--positive-color)' : 'var(--negative-color)';
 
         const avgDailySavings = daysCount > 0 ? totalSaved / daysCount : 0;
-        ui.avgSavings.textContent = `${Math.round(avgDailySavings)} ₽`; // ИЗМЕНЕНО
+        ui.avgSavings.textContent = `${Math.round(avgDailySavings)} ₽`;
         ui.avgSavings.style.color = avgDailySavings >= 0 ? 'var(--positive-color)' : 'var(--negative-color)';
 
         const monthlyProjection = avgDailySavings * AVG_DAYS_IN_MONTH;
-        ui.projection.textContent = `${Math.round(monthlyProjection)} ₽`; // ИЗМЕНЕНО
+        ui.projection.textContent = `${Math.round(monthlyProjection)} ₽`;
         ui.projection.style.color = monthlyProjection >= 0 ? 'var(--positive-color)' : 'var(--negative-color)';
         
         updateCustomProjection(avgDailySavings);
@@ -83,10 +83,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = `card day-card ${isToday ? 'today' : ''}`;
             card.dataset.date = dateStr;
+            
             card.innerHTML = `
                 <div class="date">${formatDate(dateStr)}</div>
-                <div class="value expense-value">${expense !== null ? `${expense} ₽` : 'Нет данных'}</div>
-                <div class="value ${saved === null ? '' : (saved >= 0 ? 'saved-positive' : 'saved-negative')}">${saved !== null ? Math.round(saved) + ' ₽' : '—'}</div> <!-- ИЗМЕНЕНО -->
+                
+                <div class="value expense-value-desktop">${expense !== null ? `${expense} ₽` : 'Нет данных'}</div>
+                <div class="value saved-value-desktop ${saved === null ? '' : (saved >= 0 ? 'saved-positive' : 'saved-negative')}">${saved !== null ? Math.round(saved) + ' ₽' : '—'}</div>
+                
+                <div class="data-container">
+                    <span>Расход: <span class="expense-value-mobile">${expense !== null ? `${expense} ₽` : '...'}</span></span>
+                    <span class="${saved === null ? '' : (saved >= 0 ? 'saved-positive' : 'saved-negative')}">Итог: <span class="saved-value-mobile">${saved !== null ? Math.round(saved) + ' ₽' : '...'}</span></span>
+                </div>
+
                 <div class="actions-cell">
                     <button class="edit-btn" title="Изменить">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
@@ -108,9 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const monthlyPayments = parseFloat(appData.monthlyPayments) || 0;
         const netDailyIncome = (salary - monthlyPayments) / AVG_DAYS_IN_MONTH;
         
-        const sortedEntries = Object.entries(appData.entries)
-            .filter(([, expense]) => expense !== null)
-            .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB));
+        const sortedEntries = Object.entries(appData.entries).filter(([, expense]) => expense !== null).sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB));
 
         const labels = sortedEntries.map(([date]) => formatDate(date, { month: 'short', day: 'numeric' }));
         let cumulativeSavings = 0;
@@ -121,23 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dynamicsChart = new Chart(ctx, {
             type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Накопленный баланс',
-                    data: dataPoints,
-                    borderColor: 'var(--primary-color)',
-                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                    fill: true, tension: 0.1,
-                    pointBackgroundColor: 'var(--primary-color)', pointRadius: 4, pointHoverRadius: 6
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `Баланс: ${Math.round(context.raw)} ₽` } } }, scales: { y: { ticks: { callback: v => `${Math.round(v)} ₽` } }, x: { grid: { display: false } } } } // ИЗМЕНЕНО
+            data: { labels, datasets: [{ label: 'Накопленный баланс', data: dataPoints, borderColor: 'var(--primary-color)', backgroundColor: 'rgba(52, 152, 219, 0.1)', fill: true, tension: 0.1, pointBackgroundColor: 'var(--primary-color)', pointRadius: 4, pointHoverRadius: 6 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `Баланс: ${Math.round(context.raw)} ₽` } } }, scales: { y: { ticks: { callback: v => `${Math.round(v)} ₽` } }, x: { grid: { display: false } } } }
         });
     }
 
-    // --- Вспомогательные функции ---
-    function updateCustomProjection(avgDailySavings) { const days = parseInt(ui.projectionDays.value) || 0; const projection = avgDailySavings * days; ui.customProjection.textContent = `${Math.round(projection)} ₽`; ui.customProjection.style.color = projection >= 0 ? 'var(--positive-color)' : 'var(--negative-color)'; } // ИЗМЕНЕНО
+    function updateCustomProjection(avgDailySavings) { const days = parseInt(ui.projectionDays.value) || 0; const projection = avgDailySavings * days; ui.customProjection.textContent = `${Math.round(projection)} ₽`; ui.customProjection.style.color = projection >= 0 ? 'var(--positive-color)' : 'var(--negative-color)'; }
     function formatDate(dateStr, options = { year: 'numeric', month: 'long', day: 'numeric' }) { return new Date(dateStr).toLocaleDateString('ru-RU', options); }
 
     // --- Обработчики событий ---
