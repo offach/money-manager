@@ -16,11 +16,12 @@ if (isset($_GET['api'])) { if (!$is_logged_in) { http_response_code(403); echo j
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Финансовый Менеджер</title>
     
-    <!-- Иконки и PWA -->
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- ▼▼▼ ИСПРАВЛЕННЫЙ БЛОК ДЛЯ ИКОНОК ▼▼▼ -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png"> <!-- Для Apple -->
+    <link rel="icon" type="image/png" href="apple-touch-icon.png"> <!-- Современный фавикон для всех браузеров -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ffffff">
+    <!-- ▲▲▲ КОНЕЦ ИСПРАВЛЕННОГО БЛОКА ▲▲▲ -->
 
     <link rel="stylesheet" href="style.css?v=<?= time(); ?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
