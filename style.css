@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+
+:root {
+    --bg-color: #f4f7f9;
+    --card-bg-color: #ffffff;
+    --text-color: #2c3e50;
+    --text-color-light: #8492a6;
+    --primary-color: #3498db;
+    --primary-color-dark: #2980b9;
+    --border-color: #e5e9f2;
+    --positive-color: #2ecc71;
+    --negative-color: #e74c3c;
+    --shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+    --border-radius: 12px;
+}
+
+body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 24px; -webkit-font-smoothing: antialiased; }
+.container { max-width: 960px; margin: 0 auto; } /* Увеличена ширина */
+.card { background: var(--card-bg-color); border-radius: var(--border-radius); box-shadow: var(--shadow); margin-bottom: 24px; padding: 24px; }
+
+/* --- Форма входа --- */
+.login-form { text-align: center; max-width: 400px; margin: 10vh auto; padding: 40px; }
+.login-form h1 { font-size: 24px; margin-bottom: 10px; }
+.login-form p { color: var(--text-color-light); margin-top: 0; }
+.login-form input { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; margin-top: 20px; font-size: 16px; transition: border-color 0.2s, box-shadow 0.2s; }
+.login-form input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); outline: none; }
+.login-form button { width: 100%; margin-top: 20px; padding: 12px; border: none; background-color: var(--primary-color); color: white; font-size: 16px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; }
+.login-form button:hover { background-color: var(--primary-color-dark); }
+.error-message { color: var(--negative-color); margin-top: 15px; }
+
+/* --- Основное приложение --- */
+#app { opacity: 0; animation: fadeIn 0.5s forwards; }
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* Панель итогов */
+.main-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+/* ▼▼▼ КЛЮЧЕВЫЕ ИЗМЕНЕНИЯ ЗДЕСЬ ▼▼▼ */
+.input-group { text-align: center; background: var(--bg-color); padding: 16px; border-radius: 8px; }
+.input-group label { display: block; font-size: 14px; font-weight: 500; color: var(--text-color-light); margin-bottom: 8px; }
+.input-group input { font-size: 24px; font-weight: 700; border: none; background: none; text-align: center; width: 100%; padding: 0; color: var(--text-color); }
+.input-group input:focus { outline: none; }
+
+.summary-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.summary-item { text-align: center; background: var(--bg-color); padding: 16px; border-radius: 8px; }
+.summary-item h3 { margin: 0 0 8px 0; font-size: 14px; color: var(--text-color-light); font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 5px; height: 32px; }
+.summary-item p { margin: 0; font-size: 22px; font-weight: 700; }
+.summary-item input#projection-days-input { width: 40px; font-size: 14px; font-weight: 500; padding: 2px 4px; border: 1px solid #cdd5e0; border-radius: 4px; text-align: center; margin: 0 4px; background-color: #fff; }
+.summary-item input#projection-days-input:focus { outline: none; border-color: var(--primary-color); }
+
+/* График */
+.chart-container { height: 250px; }
+
+/* Форма добавления записи */
+.add-entry-card { display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: center; }
+input[type="date"], #new-entry-expense { width: 100%; box-sizing: border-box; padding: 12px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; transition: border-color 0.2s, box-shadow 0.2s; }
+input[type="date"]:focus, #new-entry-expense:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); outline: none; }
+.add-entry-card button { background-color: var(--primary-color); color: white; font-weight: 700; cursor: pointer; transition: background-color 0.2s; padding: 12px 20px; border: none; border-radius: 8px; }
+.add-entry-card button:hover { background-color: var(--primary-color-dark); }
+
+/* Список дней */
+.days-container { display: flex; flex-direction: column; gap: 8px; }
+.day-card { display: grid; grid-template-columns: 1.5fr 1fr 1fr 100px; align-items: center; gap: 16px; padding: 16px 24px; transition: box-shadow 0.2s, transform 0.2s; }
+.day-card:hover { box-shadow: 0 8px 25px rgba(44, 62, 80, 0.1); transform: translateY(-2px); }
+.day-card.today { border-left: 4px solid var(--primary-color); }
+.day-card .date { font-weight: 700; font-size: 16px; }
+.day-card .value { font-weight: 500; }
+.saved-positive { color: var(--positive-color); font-weight: 700; }
+.saved-negative { color: var(--negative-color); font-weight: 700; }
+.actions-cell { display: flex; gap: 10px; justify-content: flex-end; }
+.actions-cell button { background: none; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; color: var(--text-color-light); transition: color 0.2s; }
+.actions-cell button:hover { color: var(--primary-color); }
+.actions-cell button.delete-btn:hover { color: var(--negative-color); }
+
+.logout-btn { position: fixed; top: 20px; right: 20px; background: var(--card-bg-color); border: 1px solid var(--border-color); border-radius: 50px; padding: 8px 16px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+.logout-btn:hover { border-color: var(--text-color); box-shadow: var(--shadow); }
